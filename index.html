@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Exit Ticket Jejak Qiblat NFC</title>
+  <title>Exit Ticket Pembelajaran</title>
+  
   <style>
     :root {
       --navy: #08304a;
@@ -71,11 +72,52 @@
       padding: 10px 16px;
       font-weight: 700;
       cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab:hover {
+      background: rgba(255, 255, 255, 0.3);
     }
 
     .tab.active {
       background: var(--cream);
       color: var(--navy);
+    }
+
+    .kategori-toggle {
+      margin-bottom: 18px;
+      text-align: center;
+      background: #e9f5f6;
+      padding: 12px;
+      border-radius: 8px;
+    }
+
+    .kategori-toggle label {
+      margin-bottom: 8px;
+      color: var(--navy);
+      display: block;
+    }
+
+    .kat-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-kat {
+      border: 2px solid var(--blue);
+      background: transparent;
+      color: var(--blue);
+      border-radius: 999px;
+      padding: 8px 24px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-kat.active {
+      background: var(--blue);
+      color: var(--white);
     }
 
     .panel {
@@ -149,6 +191,11 @@
       font-weight: 700;
       min-height: 62px;
       cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .choice:hover {
+      border-color: var(--cyan);
     }
 
     .choice.selected {
@@ -171,6 +218,11 @@
       font-weight: 800;
       font-size: 15px;
       cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    
+    .primary:active, .secondary:active, .danger:active {
+      opacity: 0.8;
     }
 
     .primary {
@@ -260,16 +312,25 @@
       border-radius: 999px;
     }
 
+    #tableWrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-top: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 16px;
       font-size: 14px;
+      min-width: 850px; /* Paksa jadual kekal lebar supaya boleh discroll di telefon */
     }
 
     th, td {
       border-bottom: 1px solid var(--line);
-      padding: 10px 8px;
+      padding: 12px 10px;
       text-align: left;
       vertical-align: top;
     }
@@ -306,26 +367,64 @@
       color: var(--muted);
       text-align: center;
     }
-
-    @media (max-width: 800px) {
-      .form-grid, .charts, .stats {
+    
+    /* Responsif - Tablet (Skrin Sederhana) */
+    @media (max-width: 950px) {
+      .stats {
+        grid-template-columns: 1fr 1fr;
+      }
+      .charts {
         grid-template-columns: 1fr;
       }
-
       .choices {
         grid-template-columns: 1fr 1fr;
       }
+    }
+
+    /* Responsif - Telefon Pintar (Mobile) */
+    @media (max-width: 600px) {
+      header {
+        padding: 20px 14px 16px;
+      }
+      
+      .form-grid, .stats, .choices {
+        grid-template-columns: 1fr;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+
+      .actions button {
+        width: 100%;
+      }
 
       .bar-row {
-        grid-template-columns: 92px 1fr 28px;
+        grid-template-columns: 90px 1fr 28px;
+      }
+      
+      .kategori-toggle {
+        padding: 10px;
+      }
+      
+      .kat-buttons {
+        flex-direction: column;
+      }
+      
+      .btn-kat {
+        width: 100%;
+      }
+      
+      .panel {
+        padding: 14px;
       }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Jejak Qiblat NFC</h1>
-    <p>Exit ticket ringkas selepas murid menggunakan kad NFC untuk belajar arah kiblat.</p>
+    <h1>Exit Ticket Kelas</h1>
+    <p>Borang maklum balas ringkas untuk menilai kefahaman dan perasaan selepas tamat sesi pembelajaran.</p>
   </header>
 
   <main>
@@ -335,74 +434,82 @@
     </div>
 
     <section class="panel active" id="ticket">
+      <div class="kategori-toggle">
+        <label>Kategori Pengguna:</label>
+        <div class="kat-buttons">
+          <button type="button" class="btn-kat active" data-kat="Murid">Murid</button>
+          <button type="button" class="btn-kat" data-kat="Guru">Guru</button>
+        </div>
+      </div>
+
       <div class="form-grid">
         <div>
-          <label for="name">Nama murid</label>
+          <label for="name" id="label-name">Nama murid</label>
           <input id="name" autocomplete="name" placeholder="Contoh: AISYAH">
         </div>
-        <div>
-          <label for="className">Kelas</label>
-          <select id="className">
-            <option value="">Pilih kelas</option>
-            <option>4 CERDAS</option>
-            <option>4 CERDIK</option>
-            <option>5 CERDAS</option>
-            <option>5 CERDIK</option>
-            <option>6 CERDAS</option>
-            <option>6 CERDIK</option>
-          </select>
+        <div id="wrap-guru">
+          <label for="className">Subjek / Kelas</label>
+          <input id="className" placeholder="Contoh: Sains 4 Bestari">
         </div>
       </div>
 
       <form id="ticketForm">
-        <div class="question" data-question="belajar">
-          <h2>1. Hari ini saya belajar tentang...</h2>
-          <div class="choices">
-            <button type="button" class="choice">Arah kiblat</button>
-            <button type="button" class="choice">Cara mencari kiblat</button>
-            <button type="button" class="choice">Kepentingan kiblat</button>
-            <button type="button" class="choice">Saya masih keliru</button>
+        <div id="soalan-murid">
+          <div class="question" data-question="belajar">
+            <h2>1. Hari ini saya telah belajar tentang...</h2>
+            <div class="choices">
+              <button type="button" class="choice">Topik baharu</button>
+              <button type="button" class="choice">Ulang kaji</button>
+              <button type="button" class="choice">Banyak perkara</button>
+              <button type="button" class="choice">Masih keliru</button>
+            </div>
+          </div>
+
+          <div class="question" data-question="rasa">
+            <h2>2. Perasaan saya selepas kelas hari ini...</h2>
+            <div class="choices">
+              <button type="button" class="choice">Seronok</button>
+              <button type="button" class="choice">Bersemangat</button>
+              <button type="button" class="choice">Biasa sahaja</button>
+              <button type="button" class="choice">Agak penat</button>
+            </div>
+          </div>
+
+          <div class="question" data-question="bantuan">
+            <h2>3. Untuk tugasan hari ini, saya...</h2>
+            <div class="choices">
+              <button type="button" class="choice">Boleh buat sendiri</button>
+              <button type="button" class="choice">Perlu bantuan rakan</button>
+              <button type="button" class="choice">Perlu bimbingan guru</button>
+              <button type="button" class="choice">Belum faham langsung</button>
+            </div>
+          </div>
+
+          <div class="question" data-question="faham">
+            <h2>4. Tahap kefahaman saya...</h2>
+            <div class="choices">
+              <button type="button" class="choice">Sangat faham</button>
+              <button type="button" class="choice">Faham</button>
+              <button type="button" class="choice">Faham sedikit</button>
+              <button type="button" class="choice">Perlu bimbingan</button>
+            </div>
+          </div>
+
+          <div class="question" data-question="menarik">
+            <h2>5. Bahagian paling menarik dalam kelas ialah...</h2>
+            <div class="choices">
+              <button type="button" class="choice">Aktiviti kumpulan</button>
+              <button type="button" class="choice">Penerangan guru</button>
+              <button type="button" class="choice">Bahan visual / video</button>
+              <button type="button" class="choice">Latihan interaktif</button>
+            </div>
           </div>
         </div>
 
-        <div class="question" data-question="rasa">
-          <h2>2. Selepas guna Jejak Qiblat NFC, saya rasa...</h2>
-          <div class="choices">
-            <button type="button" class="choice">Seronok</button>
-            <button type="button" class="choice">Faham</button>
-            <button type="button" class="choice">Teruja</button>
-            <button type="button" class="choice">Perlu bantuan</button>
-          </div>
-        </div>
-
-        <div class="question" data-question="bantuan">
-          <h2>3. Saya boleh cari arah kiblat dengan bantuan...</h2>
-          <div class="choices">
-            <button type="button" class="choice">Kompas</button>
-            <button type="button" class="choice">Matahari</button>
-            <button type="button" class="choice">Aplikasi telefon</button>
-            <button type="button" class="choice">Belum pasti</button>
-          </div>
-        </div>
-
-        <div class="question" data-question="faham">
-          <h2>4. Tahap kefahaman saya...</h2>
-          <div class="choices">
-            <button type="button" class="choice">Sangat faham</button>
-            <button type="button" class="choice">Faham</button>
-            <button type="button" class="choice">Faham sedikit</button>
-            <button type="button" class="choice">Perlu bimbingan</button>
-          </div>
-        </div>
-
-        <div class="question" data-question="menarik">
-          <h2>5. Bahagian paling menarik ialah...</h2>
-          <div class="choices">
-            <button type="button" class="choice">Sentuh kad NFC</button>
-            <button type="button" class="choice">Maklumat keluar</button>
-            <button type="button" class="choice">Cari arah kiblat</button>
-            <button type="button" class="choice">Guna teknologi</button>
-          </div>
+        <div id="soalan-guru" style="display: none; padding-top: 10px;">
+          <label for="komenGuru" style="font-size: 18px; color: var(--navy);">Maklum Balas / Catatan Guru:</label>
+          <p style="margin-top: 0; font-size: 14px; color: var(--muted); margin-bottom: 12px;">Kongsikan pandangan keseluruhan anda terhadap sesi pembelajaran pada hari ini.</p>
+          <textarea id="komenGuru" placeholder="Contoh: Objektif pembelajaran tercapai. Beberapa murid perlukan latihan pengukuhan tambahan..."></textarea>
         </div>
 
         <div class="actions">
@@ -444,8 +551,14 @@
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzc3n7maiW2qi4_mGvUCe0ze4PfI0C-1H-2mNasIpZPse_mj8xceoWuewBRhIsoSkg/exec";
-    const STORAGE_KEY = "jejak-qiblat-exit-ticket";
+    const STORAGE_KEY = "exit-ticket-umum";
     const questions = ["belajar", "rasa", "bantuan", "faham", "menarik"];
+    let currentKategori = "Murid"; // Kategori pengguna semasa
+
+    // Generate unique ID for each entry to easily update Teacher Response locally
+    function generateId() {
+      return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+    }
 
     function getResponses() {
       return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
@@ -456,18 +569,31 @@
     }
 
     function normalizeResponse(item) {
+      // Asingkan tag Kategori daripada nama (Cth: "[GURU] AHMAD" -> Kategori: Guru, Nama: AHMAD)
+      let rawName = item.name || item.Nama || "";
+      let cat = "Murid";
+      
+      if (rawName.startsWith("[GURU]")) {
+        cat = "Guru";
+        rawName = rawName.replace("[GURU]", "").trim();
+      } else if (rawName.startsWith("[MURID]")) {
+        cat = "Murid";
+        rawName = rawName.replace("[MURID]", "").trim();
+      }
+
       return {
+        id: item.id || generateId(), // Added ID for local tracking
+        kategori: cat,
+        rawNamePayload: item.name || item.Nama || `[${cat.toUpperCase()}] ${rawName}`,
         date: item.date || item.Tarikh || "",
         time: item.time || item.Masa || "",
-        name: item.name || item.Nama || "",
-        className: item.className || item.Kelas || "",
+        name: rawName,
+        className: item.className || item.Guru || item.Kelas || "",
         belajar: item.belajar || item.Belajar || "",
         rasa: item.rasa || item.Rasa || "",
         bantuan: item.bantuan || item.Bantuan || "",
         faham: item.faham || item.Faham || "",
-        menarik: item.menarik || item.Menarik || ""
-        ,
-        responGuru: item.responGuru || item["Respon Guru"] || "",
+        menarik: item.menarik || item.Menarik || "",
         rowNumber: item.rowNumber || item.RowNumber || ""
       };
     }
@@ -511,7 +637,15 @@
     async function loadRemoteResponses() {
       const result = await callScript();
       if (result && result.status === "success" && Array.isArray(result.data)) {
-        const responses = result.data.map(normalizeResponse).filter((item) => item.name);
+        // Sync remote data but preserve local IDs if matching by name/time
+        const localData = getResponses();
+        const responses = result.data.map(remoteItem => {
+           let norm = normalizeResponse(remoteItem);
+           // Try to match with local data to keep the same ID
+           const match = localData.find(l => l.name === norm.name && l.time === norm.time && l.date === norm.date);
+           if(match) { norm.id = match.id; }
+           return norm;
+        }).filter((item) => item.name);
         saveResponses(responses);
         return responses;
       }
@@ -521,9 +655,10 @@
     async function sendToSheet(response) {
       const result = await callScript({
         action: "submit",
+        id: response.id, // pass ID
         date: response.date,
         time: response.time,
-        name: response.name,
+        name: response.rawNamePayload, // Hantar nama bersama tag [MURID] atau [GURU] ke Google Sheet
         className: response.className,
         belajar: response.belajar,
         rasa: response.rasa,
@@ -535,16 +670,6 @@
       return result;
     }
 
-    async function saveTeacherResponse(rowNumber, responGuru) {
-      const result = await callScript({
-        action: "teacherResponse",
-        rowNumber,
-        responGuru
-      });
-      if (!result || result.status !== "success") throw new Error("Teacher response failed");
-      return result;
-    }
-
     function switchTab(tabId) {
       document.querySelectorAll(".tab").forEach((tab) => {
         tab.classList.toggle("active", tab.dataset.tab === tabId);
@@ -553,6 +678,8 @@
         panel.classList.toggle("active", panel.id === tabId);
       });
       if (tabId === "dashboard") renderDashboard();
+      if (tabId === "semak") document.getElementById("searchName").focus();
+      if (tabId === "borang-guru") populateTeacherForm();
     }
 
     function selectedAnswers() {
@@ -567,6 +694,7 @@
     function clearForm() {
       document.getElementById("name").value = "";
       document.getElementById("className").value = "";
+      document.getElementById("komenGuru").value = "";
       document.querySelectorAll(".choice.selected").forEach((choice) => {
         choice.classList.remove("selected");
       });
@@ -601,77 +729,123 @@
     }
 
     async function renderDashboard() {
-      const responses = await loadRemoteResponses();
-      const today = new Date().toISOString().slice(0, 10);
-      const understood = responses.filter((item) => ["Sangat faham", "Faham"].includes(item.faham)).length;
-      const support = responses.filter((item) => ["Faham sedikit", "Perlu bimbingan", "Perlu bantuan", "Belum pasti", "Saya masih keliru"].includes(item.faham) || item.rasa === "Perlu bantuan" || item.bantuan === "Belum pasti" || item.belajar === "Saya masih keliru").length;
+      // Use local storage immediately for fast UI, then try loading remote
+      let responses = getResponses(); 
+      
+      const updateDashboardUI = (data) => {
+        const today = new Date().toISOString().slice(0, 10);
+        
+        // Asingkan data murid khusus untuk carta graf supaya komen guru tidak masuk carta
+        const muridData = data.filter((item) => item.kategori === 'Murid');
+        
+        const understood = muridData.filter((item) => ["Sangat faham", "Faham"].includes(item.faham)).length;
+        const support = muridData.filter((item) => ["Faham sedikit", "Perlu bimbingan"].includes(item.faham) || ["Belum faham langsung", "Perlu bimbingan guru"].includes(item.bantuan) || item.belajar === "Masih keliru" || item.rasa === "Agak penat").length;
 
-      document.getElementById("totalResponses").textContent = responses.length;
-      document.getElementById("understoodCount").textContent = understood;
-      document.getElementById("supportCount").textContent = support;
-      document.getElementById("todayCount").textContent = responses.filter((item) => item.date === today).length;
+        document.getElementById("totalResponses").textContent = data.length;
+        document.getElementById("understoodCount").textContent = understood;
+        document.getElementById("supportCount").textContent = support;
+        document.getElementById("todayCount").textContent = data.filter((item) => item.date === today).length;
 
-      renderBarChart("fahamChart", countBy(responses, "faham"), responses.length);
-      renderBarChart("menarikChart", countBy(responses, "menarik"), responses.length);
+        renderBarChart("fahamChart", countBy(muridData, "faham"), muridData.length);
+        renderBarChart("menarikChart", countBy(muridData, "menarik"), muridData.length);
 
-      const tableWrap = document.getElementById("tableWrap");
-      if (!responses.length) {
-        tableWrap.innerHTML = '<div class="empty">Belum ada respons murid.</div>';
-        return;
-      }
+        const tableWrap = document.getElementById("tableWrap");
+        if (!data.length) {
+          tableWrap.innerHTML = '<div class="empty">Belum ada respons murid.</div>';
+          return;
+        }
 
-      tableWrap.innerHTML = `
-        <table>
-          <thead>
-            <tr>
-              <th>Masa</th>
-              <th>Nama</th>
-              <th>Kelas</th>
-              <th>Belajar</th>
-              <th>Rasa</th>
-              <th>Bantuan</th>
-              <th>Faham</th>
-              <th>Menarik</th>
-              <th>Respon Guru</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${responses.slice().reverse().map((item) => `
+        tableWrap.innerHTML = `
+          <table>
+            <thead>
               <tr>
-                <td>${item.time}</td>
-                <td>${item.name}</td>
-                <td>${item.className}</td>
-                <td>${item.belajar}</td>
-                <td>${item.rasa}</td>
-                <td>${item.bantuan}</td>
-                <td>${item.faham}</td>
-                <td>${item.menarik}</td>
-                <td class="teacher-cell">
-                  <textarea class="teacher-response" data-row="${item.rowNumber || ''}" placeholder="Contoh: Bagus. Cuba terangkan semula cara mencari arah kiblat.">${item.responGuru || ''}</textarea>
-                  <button type="button" class="save-teacher" data-row="${item.rowNumber || ''}" ${item.rowNumber ? "" : "disabled"}>Simpan</button>
-                </td>
+                <th>Masa</th>
+                <th>Kategori</th>
+                <th>Nama</th>
+                <th>Subjek / Kelas</th>
+                <th>Belajar</th>
+                <th>Rasa</th>
+                <th>Bantuan</th>
+                <th>Faham</th>
+                <th>Menarik</th>
               </tr>
-            `).join("")}
-          </tbody>
-        </table>
-      `;
+            </thead>
+            <tbody>
+              ${data.slice().reverse().map((item) => `
+                <tr>
+                  <td>${item.date}<br><small>${item.time}</small></td>
+                  <td><span style="background:${item.kategori === 'Guru' ? '#e8f4fd' : '#eaf7f1'}; color:${item.kategori === 'Guru' ? '#0f6f88' : '#1b9c76'}; padding:4px 8px; border-radius:4px; font-size:12px; font-weight:bold;">${item.kategori}</span></td>
+                  <td><strong>${item.name}</strong></td>
+                  <td>${item.className}</td>
+                  ${item.kategori === 'Guru' 
+                    ? `<td colspan="5" style="background: #fcfcfc;"><strong>Komen / Maklum Balas:</strong><br>${item.menarik}</td>`
+                    : `<td>${item.belajar}</td>
+                       <td>${item.rasa}</td>
+                       <td>${item.bantuan}</td>
+                       <td>${item.faham}</td>
+                       <td>${item.menarik}</td>`
+                  }
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        `;
+      };
+      
+      updateDashboardUI(responses);
+      
+      // Attempt to refresh from remote silently
+      try {
+        const remoteResponses = await loadRemoteResponses();
+        updateDashboardUI(remoteResponses);
+      } catch(e) {
+        console.log("Offline mode or sync failed, using local data.");
+      }
     }
 
     function exportCsv() {
       const responses = getResponses();
-      const headers = ["Tarikh", "Masa", "Nama", "Kelas", "Belajar", "Rasa", "Bantuan", "Faham", "Menarik", "Respon Guru"];
+      const headers = ["Tarikh", "Masa", "Kategori", "Nama", "Subjek/Kelas", "Belajar", "Rasa", "Bantuan", "Faham", "Menarik"];
       const rows = responses.map((item) => [
-        item.date, item.time, item.name, item.className, item.belajar, item.rasa, item.bantuan, item.faham, item.menarik, item.responGuru || ""
+        item.date, item.time, item.kategori || "Murid", item.name, item.className, item.belajar, item.rasa, item.bantuan, item.faham, item.menarik
       ]);
       const csv = [headers, ...rows].map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(",")).join("\n");
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "exit-ticket-jejak-qiblat.csv";
+      a.download = "rekod-exit-ticket.csv";
       a.click();
       URL.revokeObjectURL(url);
     }
+
+    // Toggle Kategori
+    document.querySelectorAll(".btn-kat").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".btn-kat").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentKategori = btn.dataset.kat;
+        
+        const nameLabel = document.getElementById("label-name");
+        const wrapGuru = document.getElementById("wrap-guru");
+        const soalanMurid = document.getElementById("soalan-murid");
+        const soalanGuru = document.getElementById("soalan-guru");
+        
+        if (currentKategori === "Guru") {
+          nameLabel.textContent = "Nama Guru";
+          document.getElementById("name").placeholder = "Contoh: CIKGU AMINAH";
+          wrapGuru.style.display = "none";
+          soalanMurid.style.display = "none";
+          soalanGuru.style.display = "block";
+        } else {
+          nameLabel.textContent = "Nama murid";
+          document.getElementById("name").placeholder = "Contoh: AISYAH";
+          wrapGuru.style.display = "block";
+          soalanMurid.style.display = "block";
+          soalanGuru.style.display = "none";
+        }
+      });
+    });
 
     document.querySelectorAll(".tab").forEach((tab) => {
       tab.addEventListener("click", () => switchTab(tab.dataset.tab));
@@ -695,52 +869,50 @@
       }
     });
 
-    document.getElementById("tableWrap").addEventListener("click", async (event) => {
-      if (!event.target.classList.contains("save-teacher")) return;
-
-      const button = event.target;
-      const rowNumber = button.dataset.row;
-      const textarea = button.parentElement.querySelector(".teacher-response");
-      const responGuru = textarea.value.trim();
-
-      if (!rowNumber) {
-        alert("Sila refresh dashboard selepas data masuk Google Sheet.");
-        return;
-      }
-
-      button.disabled = true;
-      button.textContent = "Menyimpan...";
-
-      try {
-        await saveTeacherResponse(rowNumber, responGuru);
-        button.textContent = "Disimpan";
-        setTimeout(() => button.textContent = "Simpan", 1800);
-      } catch (error) {
-        alert("Respon guru belum berjaya dihantar. Sila cuba semula.");
-      } finally {
-        button.disabled = false;
-      }
-    });
-
     document.getElementById("ticketForm").addEventListener("submit", async (event) => {
       event.preventDefault();
       const submitButton = event.target.querySelector('button[type="submit"]');
-      const name = document.getElementById("name").value.trim().toUpperCase();
-      const className = document.getElementById("className").value;
-      const answers = selectedAnswers();
+      const nameInput = document.getElementById("name").value.trim().toUpperCase();
+      let className = document.getElementById("className").value;
+      
+      let finalAnswers = {};
 
-      if (!name || !className || questions.some((question) => !answers[question])) {
-        alert("Sila lengkapkan nama, kelas dan semua pilihan.");
-        return;
+      if (currentKategori === "Murid") {
+        finalAnswers = selectedAnswers();
+        if (!nameInput || !className || questions.some((question) => !finalAnswers[question])) {
+          alert("Sila lengkapkan maklumat (nama, guru) dan semua pilihan soalan.");
+          return;
+        }
+      } else {
+        const komen = document.getElementById("komenGuru").value.trim();
+        if (!nameInput || !komen) {
+          alert("Sila masukkan nama dan maklum balas (komen) anda.");
+          return;
+        }
+        className = "GURU (KENDIRI)"; // Abaikan pilihan dropdown guru untuk kategori guru
+        
+        // Hantar sengkang (-) untuk soalan objektif, dan letak komen di bahagian "Menarik"
+        finalAnswers = {
+          belajar: "-",
+          rasa: "-",
+          bantuan: "-",
+          faham: "-",
+          menarik: komen
+        };
       }
 
       const now = new Date();
+      const rawNamePayload = `[${currentKategori.toUpperCase()}] ${nameInput}`;
+
       const response = {
+        id: generateId(),
+        kategori: currentKategori,
+        rawNamePayload: rawNamePayload,
         date: now.toISOString().slice(0, 10),
         time: now.toLocaleTimeString("ms-MY", { hour: "2-digit", minute: "2-digit" }),
-        name,
+        name: nameInput,
         className,
-        ...answers
+        ...finalAnswers
       };
 
       const responses = getResponses();
@@ -750,21 +922,31 @@
       try {
         submitButton.disabled = true;
         submitButton.textContent = "Menghantar...";
+        
+        // Hantar ke sheet
         await sendToSheet(response);
+        
         clearForm();
-
         const notice = document.getElementById("notice");
         notice.textContent = "Terima kasih. Jawapan kamu telah direkodkan ke Google Sheet.";
         notice.style.display = "block";
         setTimeout(() => notice.style.display = "none", 3500);
       } catch (error) {
-        alert("Data disimpan sementara dalam browser. Sila semak semula link Apps Script.");
+        // Fallback jika tiada internet / apps script fail
+        clearForm();
+        const notice = document.getElementById("notice");
+        notice.textContent = "Berjaya disimpan! (Dalam mod offline)";
+        notice.style.display = "block";
+        notice.style.background = "#fff3cd";
+        notice.style.color = "#856404";
+        setTimeout(() => notice.style.display = "none", 3500);
       } finally {
         submitButton.disabled = false;
         submitButton.textContent = "Hantar Exit Ticket";
       }
     });
 
+    // Initialize View
     renderDashboard();
   </script>
 </body>
