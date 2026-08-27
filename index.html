@@ -112,6 +112,17 @@
       background: var(--white);
     }
 
+    textarea {
+      width: 100%;
+      min-height: 74px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      font-family: inherit;
+      font-size: 14px;
+      resize: vertical;
+    }
+
     .question {
       border-top: 1px solid var(--line);
       padding: 16px 0;
@@ -263,6 +274,26 @@
       vertical-align: top;
     }
 
+    .teacher-cell {
+      min-width: 220px;
+    }
+
+    .save-teacher {
+      margin-top: 7px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--blue);
+      color: var(--white);
+      padding: 8px 10px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .save-teacher:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
     th {
       color: var(--navy);
       background: #f5fafb;
@@ -412,6 +443,7 @@
   </main>
 
   <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzc3n7maiW2qi4_mGvUCe0ze4PfI0C-1H-2mNasIpZPse_mj8xceoWuewBRhIsoSkg/exec";
     const STORAGE_KEY = "jejak-qiblat-exit-ticket";
     const questions = ["belajar", "rasa", "bantuan", "faham", "menarik"];
 
@@ -421,6 +453,96 @@
 
     function saveResponses(responses) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(responses));
+    }
+
+    function normalizeResponse(item) {
+      return {
+        date: item.date || item.Tarikh || "",
+        time: item.time || item.Masa || "",
+        name: item.name || item.Nama || "",
+        className: item.className || item.Kelas || "",
+        belajar: item.belajar || item.Belajar || "",
+        rasa: item.rasa || item.Rasa || "",
+        bantuan: item.bantuan || item.Bantuan || "",
+        faham: item.faham || item.Faham || "",
+        menarik: item.menarik || item.Menarik || ""
+        ,
+        responGuru: item.responGuru || item["Respon Guru"] || "",
+        rowNumber: item.rowNumber || item.RowNumber || ""
+      };
+    }
+
+    function callScript(params = {}) {
+      return new Promise((resolve) => {
+        const callbackName = `handleJejakQiblat${Date.now()}`;
+        const script = document.createElement("script");
+        const timeout = setTimeout(() => {
+          cleanup();
+          resolve({ status: "timeout" });
+        }, 5000);
+
+        function cleanup() {
+          clearTimeout(timeout);
+          delete window[callbackName];
+          script.remove();
+        }
+
+        window[callbackName] = (result) => {
+          cleanup();
+          resolve(result || { status: "error" });
+        };
+
+        script.onerror = () => {
+          cleanup();
+          resolve({ status: "error" });
+        };
+
+        const query = new URLSearchParams({
+          ...params,
+          callback: callbackName,
+          t: Date.now()
+        });
+
+        script.src = `${SCRIPT_URL}?${query.toString()}`;
+        document.body.appendChild(script);
+      });
+    }
+
+    async function loadRemoteResponses() {
+      const result = await callScript();
+      if (result && result.status === "success" && Array.isArray(result.data)) {
+        const responses = result.data.map(normalizeResponse).filter((item) => item.name);
+        saveResponses(responses);
+        return responses;
+      }
+      return getResponses();
+    }
+
+    async function sendToSheet(response) {
+      const result = await callScript({
+        action: "submit",
+        date: response.date,
+        time: response.time,
+        name: response.name,
+        className: response.className,
+        belajar: response.belajar,
+        rasa: response.rasa,
+        bantuan: response.bantuan,
+        faham: response.faham,
+        menarik: response.menarik
+      });
+      if (!result || result.status !== "success") throw new Error("Submit failed");
+      return result;
+    }
+
+    async function saveTeacherResponse(rowNumber, responGuru) {
+      const result = await callScript({
+        action: "teacherResponse",
+        rowNumber,
+        responGuru
+      });
+      if (!result || result.status !== "success") throw new Error("Teacher response failed");
+      return result;
     }
 
     function switchTab(tabId) {
@@ -478,8 +600,8 @@
       }).join("");
     }
 
-    function renderDashboard() {
-      const responses = getResponses();
+    async function renderDashboard() {
+      const responses = await loadRemoteResponses();
       const today = new Date().toISOString().slice(0, 10);
       const understood = responses.filter((item) => ["Sangat faham", "Faham"].includes(item.faham)).length;
       const support = responses.filter((item) => ["Faham sedikit", "Perlu bimbingan", "Perlu bantuan", "Belum pasti", "Saya masih keliru"].includes(item.faham) || item.rasa === "Perlu bantuan" || item.bantuan === "Belum pasti" || item.belajar === "Saya masih keliru").length;
@@ -510,6 +632,7 @@
               <th>Bantuan</th>
               <th>Faham</th>
               <th>Menarik</th>
+              <th>Respon Guru</th>
             </tr>
           </thead>
           <tbody>
@@ -523,6 +646,10 @@
                 <td>${item.bantuan}</td>
                 <td>${item.faham}</td>
                 <td>${item.menarik}</td>
+                <td class="teacher-cell">
+                  <textarea class="teacher-response" data-row="${item.rowNumber || ''}" placeholder="Contoh: Bagus. Cuba terangkan semula cara mencari arah kiblat.">${item.responGuru || ''}</textarea>
+                  <button type="button" class="save-teacher" data-row="${item.rowNumber || ''}" ${item.rowNumber ? "" : "disabled"}>Simpan</button>
+                </td>
               </tr>
             `).join("")}
           </tbody>
@@ -532,9 +659,9 @@
 
     function exportCsv() {
       const responses = getResponses();
-      const headers = ["Tarikh", "Masa", "Nama", "Kelas", "Belajar", "Rasa", "Bantuan", "Faham", "Menarik"];
+      const headers = ["Tarikh", "Masa", "Nama", "Kelas", "Belajar", "Rasa", "Bantuan", "Faham", "Menarik", "Respon Guru"];
       const rows = responses.map((item) => [
-        item.date, item.time, item.name, item.className, item.belajar, item.rasa, item.bantuan, item.faham, item.menarik
+        item.date, item.time, item.name, item.className, item.belajar, item.rasa, item.bantuan, item.faham, item.menarik, item.responGuru || ""
       ]);
       const csv = [headers, ...rows].map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(",")).join("\n");
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
@@ -568,8 +695,36 @@
       }
     });
 
-    document.getElementById("ticketForm").addEventListener("submit", (event) => {
+    document.getElementById("tableWrap").addEventListener("click", async (event) => {
+      if (!event.target.classList.contains("save-teacher")) return;
+
+      const button = event.target;
+      const rowNumber = button.dataset.row;
+      const textarea = button.parentElement.querySelector(".teacher-response");
+      const responGuru = textarea.value.trim();
+
+      if (!rowNumber) {
+        alert("Sila refresh dashboard selepas data masuk Google Sheet.");
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Menyimpan...";
+
+      try {
+        await saveTeacherResponse(rowNumber, responGuru);
+        button.textContent = "Disimpan";
+        setTimeout(() => button.textContent = "Simpan", 1800);
+      } catch (error) {
+        alert("Respon guru belum berjaya dihantar. Sila cuba semula.");
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    document.getElementById("ticketForm").addEventListener("submit", async (event) => {
       event.preventDefault();
+      const submitButton = event.target.querySelector('button[type="submit"]');
       const name = document.getElementById("name").value.trim().toUpperCase();
       const className = document.getElementById("className").value;
       const answers = selectedAnswers();
@@ -591,11 +746,23 @@
       const responses = getResponses();
       responses.push(response);
       saveResponses(responses);
-      clearForm();
 
-      const notice = document.getElementById("notice");
-      notice.style.display = "block";
-      setTimeout(() => notice.style.display = "none", 3500);
+      try {
+        submitButton.disabled = true;
+        submitButton.textContent = "Menghantar...";
+        await sendToSheet(response);
+        clearForm();
+
+        const notice = document.getElementById("notice");
+        notice.textContent = "Terima kasih. Jawapan kamu telah direkodkan ke Google Sheet.";
+        notice.style.display = "block";
+        setTimeout(() => notice.style.display = "none", 3500);
+      } catch (error) {
+        alert("Data disimpan sementara dalam browser. Sila semak semula link Apps Script.");
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "Hantar Exit Ticket";
+      }
     });
 
     renderDashboard();
