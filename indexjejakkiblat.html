@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Exit Ticket Jejak Qiblat NFC</title>
+  <style>
+    :root {
+      --navy: #08304a;
+      --blue: #0f6f88;
+      --cyan: #20c7b5;
+      --cream: #fff6df;
+      --white: #ffffff;
+      --ink: #173042;
+      --muted: #5c7080;
+      --line: #d8e6e8;
+      --good: #1b9c76;
+      --warn: #d9901f;
+      --bad: #d94b4b;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, var(--navy), #0b4c62 55%, #0d776f);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    header {
+      color: var(--cream);
+      padding: 28px 18px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: clamp(28px, 6vw, 52px);
+      margin: 0 0 8px;
+      letter-spacing: 0;
+    }
+
+    header p {
+      margin: 0 auto;
+      max-width: 760px;
+      font-size: 17px;
+      line-height: 1.45;
+    }
+
+    main {
+      width: min(1120px, calc(100% - 28px));
+      margin: 0 auto 32px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      background: rgba(255, 255, 255, 0.18);
+      color: var(--cream);
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      background: var(--cream);
+      color: var(--navy);
+    }
+
+    .panel {
+      display: none;
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 8px;
+      padding: 18px;
+      box-shadow: 0 20px 55px rgba(0, 0, 0, 0.22);
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    input, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 16px;
+      background: var(--white);
+    }
+
+    .question {
+      border-top: 1px solid var(--line);
+      padding: 16px 0;
+    }
+
+    .question h2 {
+      font-size: 18px;
+      margin: 0 0 10px;
+      color: var(--navy);
+    }
+
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .choice {
+      border: 2px solid var(--line);
+      background: var(--white);
+      border-radius: 8px;
+      padding: 14px 10px;
+      font-size: 15px;
+      font-weight: 700;
+      min-height: 62px;
+      cursor: pointer;
+    }
+
+    .choice.selected {
+      border-color: var(--cyan);
+      background: #e8fffb;
+      color: var(--navy);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .primary, .secondary, .danger {
+      border: 0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-weight: 800;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: var(--navy);
+      color: var(--cream);
+    }
+
+    .secondary {
+      background: #e9f5f6;
+      color: var(--navy);
+    }
+
+    .danger {
+      background: #ffe8e8;
+      color: #8e1f1f;
+    }
+
+    .notice {
+      display: none;
+      margin-top: 14px;
+      padding: 14px;
+      background: #e8fff1;
+      color: #115c3d;
+      border: 1px solid #bceccc;
+      border-radius: 8px;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .stat {
+      background: #f4fbfc;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 30px;
+      color: var(--navy);
+      margin-top: 4px;
+    }
+
+    .charts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .chart {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    .chart h3 {
+      margin: 0 0 12px;
+      color: var(--navy);
+      font-size: 17px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 34px;
+      gap: 8px;
+      align-items: center;
+      margin: 9px 0;
+      font-size: 14px;
+    }
+
+    .bar-track {
+      height: 12px;
+      background: #eaf0f1;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: var(--cyan);
+      border-radius: 999px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-size: 14px;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--navy);
+      background: #f5fafb;
+    }
+
+    .empty {
+      padding: 18px;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 800px) {
+      .form-grid, .charts, .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .choices {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .bar-row {
+        grid-template-columns: 92px 1fr 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Jejak Qiblat NFC</h1>
+    <p>Exit ticket ringkas selepas murid menggunakan kad NFC untuk belajar arah kiblat.</p>
+  </header>
+
+  <main>
+    <div class="tabs" role="tablist" aria-label="Paparan">
+      <button class="tab active" data-tab="ticket">Murid Jawab</button>
+      <button class="tab" data-tab="dashboard">Dashboard Cikgu</button>
+    </div>
+
+    <section class="panel active" id="ticket">
+      <div class="form-grid">
+        <div>
+          <label for="name">Nama murid</label>
+          <input id="name" autocomplete="name" placeholder="Contoh: AISYAH">
+        </div>
+        <div>
+          <label for="className">Kelas</label>
+          <select id="className">
+            <option value="">Pilih kelas</option>
+            <option>4 CERDAS</option>
+            <option>4 CERDIK</option>
+            <option>5 CERDAS</option>
+            <option>5 CERDIK</option>
+            <option>6 CERDAS</option>
+            <option>6 CERDIK</option>
+          </select>
+        </div>
+      </div>
+
+      <form id="ticketForm">
+        <div class="question" data-question="belajar">
+          <h2>1. Hari ini saya belajar tentang...</h2>
+          <div class="choices">
+            <button type="button" class="choice">Arah kiblat</button>
+            <button type="button" class="choice">Cara mencari kiblat</button>
+            <button type="button" class="choice">Kepentingan kiblat</button>
+            <button type="button" class="choice">Saya masih keliru</button>
+          </div>
+        </div>
+
+        <div class="question" data-question="rasa">
+          <h2>2. Selepas guna Jejak Qiblat NFC, saya rasa...</h2>
+          <div class="choices">
+            <button type="button" class="choice">Seronok</button>
+            <button type="button" class="choice">Faham</button>
+            <button type="button" class="choice">Teruja</button>
+            <button type="button" class="choice">Perlu bantuan</button>
+          </div>
+        </div>
+
+        <div class="question" data-question="bantuan">
+          <h2>3. Saya boleh cari arah kiblat dengan bantuan...</h2>
+          <div class="choices">
+            <button type="button" class="choice">Kompas</button>
+            <button type="button" class="choice">Matahari</button>
+            <button type="button" class="choice">Aplikasi telefon</button>
+            <button type="button" class="choice">Belum pasti</button>
+          </div>
+        </div>
+
+        <div class="question" data-question="faham">
+          <h2>4. Tahap kefahaman saya...</h2>
+          <div class="choices">
+            <button type="button" class="choice">Sangat faham</button>
+            <button type="button" class="choice">Faham</button>
+            <button type="button" class="choice">Faham sedikit</button>
+            <button type="button" class="choice">Perlu bimbingan</button>
+          </div>
+        </div>
+
+        <div class="question" data-question="menarik">
+          <h2>5. Bahagian paling menarik ialah...</h2>
+          <div class="choices">
+            <button type="button" class="choice">Sentuh kad NFC</button>
+            <button type="button" class="choice">Maklumat keluar</button>
+            <button type="button" class="choice">Cari arah kiblat</button>
+            <button type="button" class="choice">Guna teknologi</button>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="primary">Hantar Exit Ticket</button>
+          <button type="button" class="secondary" id="clearForm">Kosongkan Jawapan</button>
+        </div>
+      </form>
+
+      <div class="notice" id="notice">Terima kasih. Jawapan kamu telah direkodkan.</div>
+    </section>
+
+    <section class="panel" id="dashboard">
+      <div class="stats">
+        <div class="stat">Jumlah respons<strong id="totalResponses">0</strong></div>
+        <div class="stat">Sangat faham / faham<strong id="understoodCount">0</strong></div>
+        <div class="stat">Perlu bimbingan<strong id="supportCount">0</strong></div>
+        <div class="stat">Respons hari ini<strong id="todayCount">0</strong></div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="secondary" id="exportCsv">Muat Turun CSV</button>
+        <button type="button" class="danger" id="resetData">Padam Data Demo</button>
+      </div>
+
+      <div class="charts">
+        <div class="chart">
+          <h3>Tahap Kefahaman</h3>
+          <div id="fahamChart"></div>
+        </div>
+        <div class="chart">
+          <h3>Bahagian Paling Menarik</h3>
+          <div id="menarikChart"></div>
+        </div>
+      </div>
+
+      <div id="tableWrap"></div>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "jejak-qiblat-exit-ticket";
+    const questions = ["belajar", "rasa", "bantuan", "faham", "menarik"];
+
+    function getResponses() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    }
+
+    function saveResponses(responses) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(responses));
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll(".tab").forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.tab === tabId);
+      });
+      document.querySelectorAll(".panel").forEach((panel) => {
+        panel.classList.toggle("active", panel.id === tabId);
+      });
+      if (tabId === "dashboard") renderDashboard();
+    }
+
+    function selectedAnswers() {
+      const answers = {};
+      questions.forEach((question) => {
+        const selected = document.querySelector(`[data-question="${question}"] .choice.selected`);
+        answers[question] = selected ? selected.textContent.trim() : "";
+      });
+      return answers;
+    }
+
+    function clearForm() {
+      document.getElementById("name").value = "";
+      document.getElementById("className").value = "";
+      document.querySelectorAll(".choice.selected").forEach((choice) => {
+        choice.classList.remove("selected");
+      });
+    }
+
+    function countBy(responses, field) {
+      return responses.reduce((acc, item) => {
+        const value = item[field] || "Tiada jawapan";
+        acc[value] = (acc[value] || 0) + 1;
+        return acc;
+      }, {});
+    }
+
+    function renderBarChart(targetId, data, total) {
+      const target = document.getElementById(targetId);
+      const entries = Object.entries(data);
+      if (!entries.length) {
+        target.innerHTML = '<div class="empty">Belum ada data.</div>';
+        return;
+      }
+
+      target.innerHTML = entries.map(([label, count]) => {
+        const percent = total ? Math.round((count / total) * 100) : 0;
+        return `
+          <div class="bar-row">
+            <div>${label}</div>
+            <div class="bar-track"><div class="bar-fill" style="width:${percent}%"></div></div>
+            <div>${count}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderDashboard() {
+      const responses = getResponses();
+      const today = new Date().toISOString().slice(0, 10);
+      const understood = responses.filter((item) => ["Sangat faham", "Faham"].includes(item.faham)).length;
+      const support = responses.filter((item) => ["Faham sedikit", "Perlu bimbingan", "Perlu bantuan", "Belum pasti", "Saya masih keliru"].includes(item.faham) || item.rasa === "Perlu bantuan" || item.bantuan === "Belum pasti" || item.belajar === "Saya masih keliru").length;
+
+      document.getElementById("totalResponses").textContent = responses.length;
+      document.getElementById("understoodCount").textContent = understood;
+      document.getElementById("supportCount").textContent = support;
+      document.getElementById("todayCount").textContent = responses.filter((item) => item.date === today).length;
+
+      renderBarChart("fahamChart", countBy(responses, "faham"), responses.length);
+      renderBarChart("menarikChart", countBy(responses, "menarik"), responses.length);
+
+      const tableWrap = document.getElementById("tableWrap");
+      if (!responses.length) {
+        tableWrap.innerHTML = '<div class="empty">Belum ada respons murid.</div>';
+        return;
+      }
+
+      tableWrap.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Masa</th>
+              <th>Nama</th>
+              <th>Kelas</th>
+              <th>Belajar</th>
+              <th>Rasa</th>
+              <th>Bantuan</th>
+              <th>Faham</th>
+              <th>Menarik</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${responses.slice().reverse().map((item) => `
+              <tr>
+                <td>${item.time}</td>
+                <td>${item.name}</td>
+                <td>${item.className}</td>
+                <td>${item.belajar}</td>
+                <td>${item.rasa}</td>
+                <td>${item.bantuan}</td>
+                <td>${item.faham}</td>
+                <td>${item.menarik}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function exportCsv() {
+      const responses = getResponses();
+      const headers = ["Tarikh", "Masa", "Nama", "Kelas", "Belajar", "Rasa", "Bantuan", "Faham", "Menarik"];
+      const rows = responses.map((item) => [
+        item.date, item.time, item.name, item.className, item.belajar, item.rasa, item.bantuan, item.faham, item.menarik
+      ]);
+      const csv = [headers, ...rows].map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(",")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "exit-ticket-jejak-qiblat.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    document.querySelectorAll(".tab").forEach((tab) => {
+      tab.addEventListener("click", () => switchTab(tab.dataset.tab));
+    });
+
+    document.querySelectorAll(".choice").forEach((choice) => {
+      choice.addEventListener("click", () => {
+        const group = choice.closest(".choices");
+        group.querySelectorAll(".choice").forEach((item) => item.classList.remove("selected"));
+        choice.classList.add("selected");
+      });
+    });
+
+    document.getElementById("clearForm").addEventListener("click", clearForm);
+    document.getElementById("exportCsv").addEventListener("click", exportCsv);
+
+    document.getElementById("resetData").addEventListener("click", () => {
+      if (confirm("Padam semua data demo dalam browser ini?")) {
+        saveResponses([]);
+        renderDashboard();
+      }
+    });
+
+    document.getElementById("ticketForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const name = document.getElementById("name").value.trim().toUpperCase();
+      const className = document.getElementById("className").value;
+      const answers = selectedAnswers();
+
+      if (!name || !className || questions.some((question) => !answers[question])) {
+        alert("Sila lengkapkan nama, kelas dan semua pilihan.");
+        return;
+      }
+
+      const now = new Date();
+      const response = {
+        date: now.toISOString().slice(0, 10),
+        time: now.toLocaleTimeString("ms-MY", { hour: "2-digit", minute: "2-digit" }),
+        name,
+        className,
+        ...answers
+      };
+
+      const responses = getResponses();
+      responses.push(response);
+      saveResponses(responses);
+      clearForm();
+
+      const notice = document.getElementById("notice");
+      notice.style.display = "block";
+      setTimeout(() => notice.style.display = "none", 3500);
+    });
+
+    renderDashboard();
+  </script>
+</body>
+</html>
