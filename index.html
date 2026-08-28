@@ -3,80 +3,83 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Exit Ticket Pembelajaran</title>
-  
+  <title>Maklum Balas Produk KMR PUICE - Jejak Qiblat NFC</title>
   <style>
     :root {
       --navy: #08304a;
-      --blue: #0f6f88;
+      --teal: #0f6f88;
       --cyan: #20c7b5;
       --cream: #fff6df;
       --white: #ffffff;
       --ink: #173042;
-      --muted: #5c7080;
-      --line: #d8e6e8;
-      --good: #1b9c76;
-      --warn: #d9901f;
-      --bad: #d94b4b;
+      --muted: #617482;
+      --line: #d7e6e8;
+      --soft: #f4fafb;
+      --ok: #157a54;
+      --bad: #a12c2c;
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      background: linear-gradient(135deg, var(--navy), #0b4c62 55%, #0d776f);
-      color: var(--ink);
       min-height: 100vh;
+      background: linear-gradient(135deg, var(--navy), #0b5065 55%, #0e756f);
+      color: var(--ink);
     }
 
     header {
       color: var(--cream);
-      padding: 28px 18px 20px;
       text-align: center;
+      padding: 28px 14px 18px;
     }
 
-    header h1 {
-      font-size: clamp(28px, 6vw, 52px);
+    h1 {
       margin: 0 0 8px;
+      font-size: clamp(27px, 6vw, 48px);
       letter-spacing: 0;
     }
 
     header p {
       margin: 0 auto;
-      max-width: 760px;
-      font-size: 17px;
+      max-width: 780px;
       line-height: 1.45;
+      font-size: 16px;
     }
 
     main {
-      width: min(1120px, calc(100% - 28px));
-      margin: 0 auto 32px;
+      width: min(1080px, calc(100% - 24px));
+      margin: 0 auto 30px;
     }
 
     .tabs {
       display: flex;
-      gap: 8px;
-      justify-content: center;
-      margin-bottom: 14px;
       flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: wait;
+      opacity: 0.55;
     }
 
     .tab {
-      border: 1px solid rgba(255, 255, 255, 0.65);
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.55);
       background: rgba(255, 255, 255, 0.18);
       color: var(--cream);
-      border-radius: 999px;
-      padding: 10px 16px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .tab:hover {
-      background: rgba(255, 255, 255, 0.3);
     }
 
     .tab.active {
@@ -84,870 +87,608 @@
       color: var(--navy);
     }
 
-    .kategori-toggle {
-      margin-bottom: 18px;
-      text-align: center;
-      background: #e9f5f6;
-      padding: 12px;
-      border-radius: 8px;
-    }
-
-    .kategori-toggle label {
-      margin-bottom: 8px;
-      color: var(--navy);
-      display: block;
-    }
-
-    .kat-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .btn-kat {
-      border: 2px solid var(--blue);
-      background: transparent;
-      color: var(--blue);
-      border-radius: 999px;
-      padding: 8px 24px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-kat.active {
-      background: var(--blue);
-      color: var(--white);
-    }
-
     .panel {
       display: none;
-      background: rgba(255, 255, 255, 0.96);
+      background: rgba(255, 255, 255, 0.97);
       border-radius: 8px;
-      padding: 18px;
-      box-shadow: 0 20px 55px rgba(0, 0, 0, 0.22);
+      padding: 16px;
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.2);
     }
 
-    .panel.active {
-      display: block;
+    .panel.active { display: block; }
+
+    .status {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+      background: var(--soft);
+      color: var(--muted);
+      font-weight: 800;
     }
 
-    .form-grid {
+    .status.ok {
+      background: #e8fff2;
+      border-color: #bfeccd;
+      color: var(--ok);
+    }
+
+    .status.bad {
+      background: #fff0f0;
+      border-color: #ffd2d2;
+      color: var(--bad);
+    }
+
+    .grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-bottom: 14px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
     }
 
     label {
       display: block;
-      font-weight: 700;
       margin-bottom: 6px;
+      font-weight: 800;
+      color: var(--navy);
     }
 
-    input, select {
+    input, textarea {
       width: 100%;
       border: 1px solid var(--line);
       border-radius: 8px;
       padding: 12px;
-      font-size: 16px;
+      font: inherit;
       background: var(--white);
     }
 
     textarea {
-      width: 100%;
-      min-height: 74px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 10px;
-      font-family: inherit;
-      font-size: 14px;
+      min-height: 88px;
       resize: vertical;
+    }
+
+    .role-options, .choices {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .role-options {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-bottom: 12px;
+    }
+
+    .choice, .role {
+      min-height: 58px;
+      border: 2px solid var(--line);
+      background: var(--white);
+      color: var(--ink);
+    }
+
+    .choice.selected, .role.selected {
+      border-color: var(--cyan);
+      background: #e7fffb;
+      color: var(--navy);
     }
 
     .question {
       border-top: 1px solid var(--line);
-      padding: 16px 0;
+      padding: 15px 0;
     }
 
     .question h2 {
-      font-size: 18px;
       margin: 0 0 10px;
       color: var(--navy);
+      font-size: 18px;
     }
 
-    .choices {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .choice {
-      border: 2px solid var(--line);
-      background: var(--white);
-      border-radius: 8px;
-      padding: 14px 10px;
-      font-size: 15px;
-      font-weight: 700;
-      min-height: 62px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .choice:hover {
-      border-color: var(--cyan);
-    }
-
-    .choice.selected {
-      border-color: var(--cyan);
-      background: #e8fffb;
-      color: var(--navy);
-    }
+    .primary { background: var(--navy); color: var(--cream); }
+    .secondary { background: #e8f4f6; color: var(--navy); }
 
     .actions {
       display: flex;
-      gap: 10px;
       flex-wrap: wrap;
+      gap: 9px;
       margin-top: 12px;
-    }
-
-    .primary, .secondary, .danger {
-      border: 0;
-      border-radius: 8px;
-      padding: 12px 16px;
-      font-weight: 800;
-      font-size: 15px;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-    
-    .primary:active, .secondary:active, .danger:active {
-      opacity: 0.8;
-    }
-
-    .primary {
-      background: var(--navy);
-      color: var(--cream);
-    }
-
-    .secondary {
-      background: #e9f5f6;
-      color: var(--navy);
-    }
-
-    .danger {
-      background: #ffe8e8;
-      color: #8e1f1f;
-    }
-
-    .notice {
-      display: none;
-      margin-top: 14px;
-      padding: 14px;
-      background: #e8fff1;
-      color: #115c3d;
-      border: 1px solid #bceccc;
-      border-radius: 8px;
-      font-weight: 700;
     }
 
     .stats {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 16px;
+      gap: 10px;
+      margin: 12px 0;
     }
 
     .stat {
-      background: #f4fbfc;
       border: 1px solid var(--line);
       border-radius: 8px;
-      padding: 14px;
+      padding: 12px;
+      background: var(--soft);
+      font-weight: 800;
     }
 
     .stat strong {
       display: block;
-      font-size: 30px;
-      color: var(--navy);
       margin-top: 4px;
+      color: var(--navy);
+      font-size: 30px;
     }
 
-    .charts {
+    .split {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 12px;
     }
 
-    .chart {
+    .cards {
+      display: grid;
+      gap: 10px;
+    }
+
+    .card {
       border: 1px solid var(--line);
       border-radius: 8px;
-      padding: 14px;
+      background: var(--white);
+      padding: 12px;
     }
 
-    .chart h3 {
-      margin: 0 0 12px;
+    .card strong {
+      display: block;
       color: var(--navy);
-      font-size: 17px;
+      margin-bottom: 4px;
     }
 
-    .bar-row {
+    .card span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .mini {
       display: grid;
-      grid-template-columns: 120px 1fr 34px;
-      gap: 8px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .mini div {
+      background: var(--soft);
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .mini b {
+      display: block;
+      color: var(--navy);
+      margin-bottom: 3px;
+    }
+
+    .bar {
+      display: grid;
+      grid-template-columns: 160px 1fr 36px;
       align-items: center;
+      gap: 8px;
       margin: 9px 0;
       font-size: 14px;
     }
 
-    .bar-track {
+    .track {
       height: 12px;
-      background: #eaf0f1;
       border-radius: 999px;
+      background: #e6eff1;
       overflow: hidden;
     }
 
-    .bar-fill {
+    .fill {
       height: 100%;
-      background: var(--cyan);
       border-radius: 999px;
-    }
-
-    #tableWrap {
-      width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      margin-top: 16px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-      min-width: 850px; /* Paksa jadual kekal lebar supaya boleh discroll di telefon */
-    }
-
-    th, td {
-      border-bottom: 1px solid var(--line);
-      padding: 12px 10px;
-      text-align: left;
-      vertical-align: top;
-    }
-
-    .teacher-cell {
-      min-width: 220px;
-    }
-
-    .save-teacher {
-      margin-top: 7px;
-      border: 0;
-      border-radius: 8px;
-      background: var(--blue);
-      color: var(--white);
-      padding: 8px 10px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .save-teacher:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-    }
-
-    th {
-      color: var(--navy);
-      background: #f5fafb;
+      background: var(--cyan);
     }
 
     .empty {
-      padding: 18px;
       border: 1px dashed var(--line);
       border-radius: 8px;
+      padding: 16px;
       color: var(--muted);
       text-align: center;
-    }
-    
-    /* Responsif - Tablet (Skrin Sederhana) */
-    @media (max-width: 950px) {
-      .stats {
-        grid-template-columns: 1fr 1fr;
-      }
-      .charts {
-        grid-template-columns: 1fr;
-      }
-      .choices {
-        grid-template-columns: 1fr 1fr;
-      }
+      font-weight: 800;
     }
 
-    /* Responsif - Telefon Pintar (Mobile) */
-    @media (max-width: 600px) {
-      header {
-        padding: 20px 14px 16px;
-      }
-      
-      .form-grid, .stats, .choices {
-        grid-template-columns: 1fr;
-      }
-
-      .actions {
-        flex-direction: column;
-      }
-
-      .actions button {
-        width: 100%;
-      }
-
-      .bar-row {
-        grid-template-columns: 90px 1fr 28px;
-      }
-      
-      .kategori-toggle {
-        padding: 10px;
-      }
-      
-      .kat-buttons {
-        flex-direction: column;
-      }
-      
-      .btn-kat {
-        width: 100%;
-      }
-      
-      .panel {
-        padding: 14px;
-      }
+    @media (max-width: 820px) {
+      .grid, .stats, .split, .mini, .role-options { grid-template-columns: 1fr; }
+      .choices { grid-template-columns: 1fr 1fr; }
+      .bar { grid-template-columns: 105px 1fr 30px; }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Exit Ticket Kelas</h1>
-    <p>Borang maklum balas ringkas untuk menilai kefahaman dan perasaan selepas tamat sesi pembelajaran.</p>
+    <h1>Maklum Balas Produk KMR PUICE</h1>
+    <p>Survey produk Jejak Qiblat NFC untuk murid dan guru. Soalan adalah sama bagi kedua-dua kumpulan responden.</p>
   </header>
 
   <main>
-    <div class="tabs" role="tablist" aria-label="Paparan">
-      <button class="tab active" data-tab="ticket">Murid Jawab</button>
-      <button class="tab" data-tab="dashboard">Dashboard Cikgu</button>
+    <div class="tabs">
+      <button class="tab active" type="button" data-tab="survey">Borang Survey</button>
+      <button class="tab" type="button" data-tab="dashboard">Dashboard</button>
     </div>
 
-    <section class="panel active" id="ticket">
-      <div class="kategori-toggle">
-        <label>Kategori Pengguna:</label>
-        <div class="kat-buttons">
-          <button type="button" class="btn-kat active" data-kat="Murid">Murid</button>
-          <button type="button" class="btn-kat" data-kat="Guru">Guru</button>
+    <section class="panel active" id="survey">
+      <div id="surveyStatus" class="status">Pilih peranan, isi maklumat ringkas dan jawab survey produk.</div>
+
+      <form id="surveyForm">
+        <label>Peranan responden</label>
+        <div class="role-options" id="roleOptions">
+          <button type="button" class="role" data-role="MURID">Murid</button>
+          <button type="button" class="role" data-role="GURU">Guru</button>
         </div>
-      </div>
 
-      <div class="form-grid">
-        <div>
-          <label for="name" id="label-name">Nama murid</label>
-          <input id="name" autocomplete="name" placeholder="Contoh: AISYAH">
-        </div>
-        <div id="wrap-guru">
-          <label for="className">Subjek / Kelas</label>
-          <input id="className" placeholder="Contoh: Sains 4 Bestari">
-        </div>
-      </div>
-
-      <form id="ticketForm">
-        <div id="soalan-murid">
-          <div class="question" data-question="belajar">
-            <h2>1. Hari ini saya telah belajar tentang...</h2>
-            <div class="choices">
-              <button type="button" class="choice">Topik baharu</button>
-              <button type="button" class="choice">Ulang kaji</button>
-              <button type="button" class="choice">Banyak perkara</button>
-              <button type="button" class="choice">Masih keliru</button>
-            </div>
+        <div class="grid">
+          <div>
+            <label for="respondentName">Nama responden</label>
+            <input id="respondentName" placeholder="Contoh: AISYAH / CIKGU SAL SABILA">
           </div>
-
-          <div class="question" data-question="rasa">
-            <h2>2. Perasaan saya selepas kelas hari ini...</h2>
-            <div class="choices">
-              <button type="button" class="choice">Seronok</button>
-              <button type="button" class="choice">Bersemangat</button>
-              <button type="button" class="choice">Biasa sahaja</button>
-              <button type="button" class="choice">Agak penat</button>
-            </div>
-          </div>
-
-          <div class="question" data-question="bantuan">
-            <h2>3. Untuk tugasan hari ini, saya...</h2>
-            <div class="choices">
-              <button type="button" class="choice">Boleh buat sendiri</button>
-              <button type="button" class="choice">Perlu bantuan rakan</button>
-              <button type="button" class="choice">Perlu bimbingan guru</button>
-              <button type="button" class="choice">Belum faham langsung</button>
-            </div>
-          </div>
-
-          <div class="question" data-question="faham">
-            <h2>4. Tahap kefahaman saya...</h2>
-            <div class="choices">
-              <button type="button" class="choice">Sangat faham</button>
-              <button type="button" class="choice">Faham</button>
-              <button type="button" class="choice">Faham sedikit</button>
-              <button type="button" class="choice">Perlu bimbingan</button>
-            </div>
-          </div>
-
-          <div class="question" data-question="menarik">
-            <h2>5. Bahagian paling menarik dalam kelas ialah...</h2>
-            <div class="choices">
-              <button type="button" class="choice">Aktiviti kumpulan</button>
-              <button type="button" class="choice">Penerangan guru</button>
-              <button type="button" class="choice">Bahan visual / video</button>
-              <button type="button" class="choice">Latihan interaktif</button>
-            </div>
+          <div>
+            <label for="respondentGroup">Kelas / unit / sekolah</label>
+            <input id="respondentGroup" placeholder="Contoh: 5 CERDIK / SKSSAS">
           </div>
         </div>
 
-        <div id="soalan-guru" style="display: none; padding-top: 10px;">
-          <label for="komenGuru" style="font-size: 18px; color: var(--navy);">Maklum Balas / Catatan Guru:</label>
-          <p style="margin-top: 0; font-size: 14px; color: var(--muted); margin-bottom: 12px;">Kongsikan pandangan keseluruhan anda terhadap sesi pembelajaran pada hari ini.</p>
-          <textarea id="komenGuru" placeholder="Contoh: Objektif pembelajaran tercapai. Beberapa murid perlukan latihan pengukuhan tambahan..."></textarea>
+        <div class="question" data-question="mudah">
+          <h2>1. Produk Jejak Qiblat NFC mudah digunakan.</h2>
+          <div class="choices">
+            <button type="button" class="choice">Sangat setuju</button>
+            <button type="button" class="choice">Setuju</button>
+            <button type="button" class="choice">Kurang setuju</button>
+            <button type="button" class="choice">Tidak setuju</button>
+          </div>
+        </div>
+
+        <div class="question" data-question="arahan">
+          <h2>2. Arahan penggunaan produk jelas dan mudah difahami.</h2>
+          <div class="choices">
+            <button type="button" class="choice">Sangat setuju</button>
+            <button type="button" class="choice">Setuju</button>
+            <button type="button" class="choice">Kurang setuju</button>
+            <button type="button" class="choice">Tidak setuju</button>
+          </div>
+        </div>
+
+        <div class="question" data-question="menarik">
+          <h2>3. Reka bentuk produk menarik perhatian pengguna.</h2>
+          <div class="choices">
+            <button type="button" class="choice">Sangat setuju</button>
+            <button type="button" class="choice">Setuju</button>
+            <button type="button" class="choice">Kurang setuju</button>
+            <button type="button" class="choice">Tidak setuju</button>
+          </div>
+        </div>
+
+        <div class="question" data-question="nfc">
+          <h2>4. Fungsi NFC berfungsi dengan baik semasa digunakan.</h2>
+          <div class="choices">
+            <button type="button" class="choice">Sangat setuju</button>
+            <button type="button" class="choice">Setuju</button>
+            <button type="button" class="choice">Kurang setuju</button>
+            <button type="button" class="choice">Tidak setuju</button>
+          </div>
+        </div>
+
+        <div class="question" data-question="bantu">
+          <h2>5. Produk ini membantu pengguna memahami maklumat dengan lebih mudah.</h2>
+          <div class="choices">
+            <button type="button" class="choice">Sangat setuju</button>
+            <button type="button" class="choice">Setuju</button>
+            <button type="button" class="choice">Kurang setuju</button>
+            <button type="button" class="choice">Tidak setuju</button>
+          </div>
+        </div>
+
+        <div class="question" data-question="kmr">
+          <h2>6. Produk ini sesuai digunakan dalam aktiviti KMR / PUICE.</h2>
+          <div class="choices">
+            <button type="button" class="choice">Sangat setuju</button>
+            <button type="button" class="choice">Setuju</button>
+            <button type="button" class="choice">Kurang setuju</button>
+            <button type="button" class="choice">Tidak setuju</button>
+          </div>
+        </div>
+
+        <div class="question" data-question="sebar">
+          <h2>7. Produk ini berpotensi digunakan oleh pengguna lain.</h2>
+          <div class="choices">
+            <button type="button" class="choice">Sangat setuju</button>
+            <button type="button" class="choice">Setuju</button>
+            <button type="button" class="choice">Kurang setuju</button>
+            <button type="button" class="choice">Tidak setuju</button>
+          </div>
+        </div>
+
+        <div class="question" data-question="puas">
+          <h2>8. Saya berpuas hati dengan produk ini.</h2>
+          <div class="choices">
+            <button type="button" class="choice">Sangat setuju</button>
+            <button type="button" class="choice">Setuju</button>
+            <button type="button" class="choice">Kurang setuju</button>
+            <button type="button" class="choice">Tidak setuju</button>
+          </div>
+        </div>
+
+        <div class="question">
+          <label for="suggestion">Cadangan penambahbaikan produk</label>
+          <textarea id="suggestion" placeholder="Contoh: Tambah audio, gambar, arahan bergambar, QR alternatif atau aktiviti interaktif."></textarea>
         </div>
 
         <div class="actions">
-          <button type="submit" class="primary">Hantar Exit Ticket</button>
-          <button type="button" class="secondary" id="clearForm">Kosongkan Jawapan</button>
+          <button type="submit" class="primary">Hantar Maklum Balas</button>
+          <button type="button" class="secondary" id="clearForm">Kosongkan</button>
         </div>
       </form>
-
-      <div class="notice" id="notice">Terima kasih. Jawapan kamu telah direkodkan.</div>
     </section>
 
     <section class="panel" id="dashboard">
-      <div class="stats">
-        <div class="stat">Jumlah respons<strong id="totalResponses">0</strong></div>
-        <div class="stat">Sangat faham / faham<strong id="understoodCount">0</strong></div>
-        <div class="stat">Perlu bimbingan<strong id="supportCount">0</strong></div>
-        <div class="stat">Respons hari ini<strong id="todayCount">0</strong></div>
-      </div>
-
+      <div id="dashboardStatus" class="status">Tekan Refresh Data untuk baca maklum balas produk dari Google Sheet.</div>
       <div class="actions">
+        <button type="button" class="secondary" id="refreshData">Refresh Data</button>
         <button type="button" class="secondary" id="exportCsv">Muat Turun CSV</button>
-        <button type="button" class="danger" id="resetData">Padam Data Demo</button>
       </div>
 
-      <div class="charts">
-        <div class="chart">
-          <h3>Tahap Kefahaman</h3>
-          <div id="fahamChart"></div>
-        </div>
-        <div class="chart">
-          <h3>Bahagian Paling Menarik</h3>
-          <div id="menarikChart"></div>
-        </div>
+      <div class="stats">
+        <div class="stat">Jumlah respon<strong id="totalAll">0</strong></div>
+        <div class="stat">Murid<strong id="totalStudent">0</strong></div>
+        <div class="stat">Guru<strong id="totalTeacher">0</strong></div>
+        <div class="stat">Respon positif<strong id="totalPositive">0%</strong></div>
       </div>
 
-      <div id="tableWrap"></div>
+      <div class="split">
+        <div class="card">
+          <strong>Ringkasan Jawapan</strong>
+          <div id="summaryBars"></div>
+        </div>
+        <div>
+          <strong>Senarai Respon</strong>
+          <div id="responseList" class="cards"></div>
+        </div>
+      </div>
     </section>
   </main>
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzc3n7maiW2qi4_mGvUCe0ze4PfI0C-1H-2mNasIpZPse_mj8xceoWuewBRhIsoSkg/exec";
-    const STORAGE_KEY = "exit-ticket-umum";
-    const questions = ["belajar", "rasa", "bantuan", "faham", "menarik"];
-    let currentKategori = "Murid"; // Kategori pengguna semasa
+    const QUESTIONS = ["mudah", "arahan", "menarik", "nfc", "bantu", "kmr", "sebar", "puas"];
+    const QUESTION_LABELS = {
+      mudah: "Mudah digunakan",
+      arahan: "Arahan jelas",
+      menarik: "Reka bentuk menarik",
+      nfc: "Fungsi NFC",
+      bantu: "Bantu faham",
+      kmr: "Sesuai KMR/PUICE",
+      sebar: "Potensi guna luas",
+      puas: "Puas hati"
+    };
+    let selectedRole = "";
+    let responses = [];
 
-    // Generate unique ID for each entry to easily update Teacher Response locally
-    function generateId() {
-      return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+    function setStatus(id, message, type = "") {
+      const box = document.getElementById(id);
+      box.textContent = message;
+      box.className = `status ${type}`.trim();
     }
 
-    function getResponses() {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    }
-
-    function saveResponses(responses) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(responses));
-    }
-
-    function normalizeResponse(item) {
-      // Asingkan tag Kategori daripada nama (Cth: "[GURU] AHMAD" -> Kategori: Guru, Nama: AHMAD)
-      let rawName = item.name || item.Nama || "";
-      let cat = "Murid";
-      
-      if (rawName.startsWith("[GURU]")) {
-        cat = "Guru";
-        rawName = rawName.replace("[GURU]", "").trim();
-      } else if (rawName.startsWith("[MURID]")) {
-        cat = "Murid";
-        rawName = rawName.replace("[MURID]", "").trim();
-      }
-
-      return {
-        id: item.id || generateId(), // Added ID for local tracking
-        kategori: cat,
-        rawNamePayload: item.name || item.Nama || `[${cat.toUpperCase()}] ${rawName}`,
-        date: item.date || item.Tarikh || "",
-        time: item.time || item.Masa || "",
-        name: rawName,
-        className: item.className || item.Guru || item.Kelas || "",
-        belajar: item.belajar || item.Belajar || "",
-        rasa: item.rasa || item.Rasa || "",
-        bantuan: item.bantuan || item.Bantuan || "",
-        faham: item.faham || item.Faham || "",
-        menarik: item.menarik || item.Menarik || "",
-        rowNumber: item.rowNumber || item.RowNumber || ""
-      };
-    }
-
-    function callScript(params = {}) {
+    function callAppsScript(params = {}) {
       return new Promise((resolve) => {
-        const callbackName = `handleJejakQiblat${Date.now()}`;
+        const callback = `kmrPuiceSurvey_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
         const script = document.createElement("script");
         const timeout = setTimeout(() => {
           cleanup();
-          resolve({ status: "timeout" });
-        }, 5000);
+          resolve({ status: "error", message: "Timeout. Apps Script tidak jawab." });
+        }, 9000);
 
         function cleanup() {
           clearTimeout(timeout);
-          delete window[callbackName];
+          delete window[callback];
           script.remove();
         }
 
-        window[callbackName] = (result) => {
+        window[callback] = (result) => {
           cleanup();
-          resolve(result || { status: "error" });
+          resolve(result || { status: "error", message: "Tiada respons." });
         };
 
         script.onerror = () => {
           cleanup();
-          resolve({ status: "error" });
+          resolve({ status: "error", message: "Gagal buka URL Apps Script." });
         };
 
-        const query = new URLSearchParams({
-          ...params,
-          callback: callbackName,
-          t: Date.now()
-        });
-
+        const query = new URLSearchParams({ ...params, callback, t: String(Date.now()) });
         script.src = `${SCRIPT_URL}?${query.toString()}`;
         document.body.appendChild(script);
       });
     }
 
-    async function loadRemoteResponses() {
-      const result = await callScript();
-      if (result && result.status === "success" && Array.isArray(result.data)) {
-        // Sync remote data but preserve local IDs if matching by name/time
-        const localData = getResponses();
-        const responses = result.data.map(remoteItem => {
-           let norm = normalizeResponse(remoteItem);
-           // Try to match with local data to keep the same ID
-           const match = localData.find(l => l.name === norm.name && l.time === norm.time && l.date === norm.date);
-           if(match) { norm.id = match.id; }
-           return norm;
-        }).filter((item) => item.name);
-        saveResponses(responses);
-        return responses;
-      }
-      return getResponses();
-    }
-
-    async function sendToSheet(response) {
-      const result = await callScript({
-        action: "submit",
-        id: response.id, // pass ID
-        date: response.date,
-        time: response.time,
-        name: response.rawNamePayload, // Hantar nama bersama tag [MURID] atau [GURU] ke Google Sheet
-        className: response.className,
-        belajar: response.belajar,
-        rasa: response.rasa,
-        bantuan: response.bantuan,
-        faham: response.faham,
-        menarik: response.menarik
-      });
-      if (!result || result.status !== "success") throw new Error("Submit failed");
-      return result;
-    }
-
-    function switchTab(tabId) {
-      document.querySelectorAll(".tab").forEach((tab) => {
-        tab.classList.toggle("active", tab.dataset.tab === tabId);
-      });
-      document.querySelectorAll(".panel").forEach((panel) => {
-        panel.classList.toggle("active", panel.id === tabId);
-      });
-      if (tabId === "dashboard") renderDashboard();
-      if (tabId === "semak") document.getElementById("searchName").focus();
-      if (tabId === "borang-guru") populateTeacherForm();
-    }
-
     function selectedAnswers() {
       const answers = {};
-      questions.forEach((question) => {
+      QUESTIONS.forEach((question) => {
         const selected = document.querySelector(`[data-question="${question}"] .choice.selected`);
         answers[question] = selected ? selected.textContent.trim() : "";
       });
       return answers;
     }
 
+    function isPositive(value) {
+      return value === "Sangat setuju" || value === "Setuju";
+    }
+
     function clearForm() {
-      document.getElementById("name").value = "";
-      document.getElementById("className").value = "";
-      document.getElementById("komenGuru").value = "";
-      document.querySelectorAll(".choice.selected").forEach((choice) => {
-        choice.classList.remove("selected");
+      selectedRole = "";
+      document.querySelectorAll(".role.selected, .choice.selected").forEach((item) => item.classList.remove("selected"));
+      document.getElementById("respondentName").value = "";
+      document.getElementById("respondentGroup").value = "";
+      document.getElementById("suggestion").value = "";
+    }
+
+    async function submitSurvey(event) {
+      event.preventDefault();
+      const button = event.target.querySelector("button[type='submit']");
+      const name = document.getElementById("respondentName").value.trim().toUpperCase();
+      const group = document.getElementById("respondentGroup").value.trim().toUpperCase();
+      const suggestion = document.getElementById("suggestion").value.trim();
+      const answers = selectedAnswers();
+
+      if (!selectedRole || !name || !group || QUESTIONS.some((question) => !answers[question])) {
+        setStatus("surveyStatus", "Sila pilih peranan, isi nama, kelas/unit/sekolah dan jawab semua soalan.", "bad");
+        return;
+      }
+
+      const now = new Date();
+      button.disabled = true;
+      button.textContent = "Menghantar...";
+      setStatus("surveyStatus", "Sedang hantar maklum balas produk ke Google Sheet...");
+
+      const result = await callAppsScript({
+        action: "submitProductFeedback",
+        timestampDate: now.toISOString().slice(0, 10),
+        timestampTime: now.toLocaleTimeString("ms-MY", { hour: "2-digit", minute: "2-digit" }),
+        role: selectedRole,
+        name,
+        group,
+        mudah: answers.mudah,
+        arahan: answers.arahan,
+        menarik: answers.menarik,
+        nfc: answers.nfc,
+        bantu: answers.bantu,
+        kmr: answers.kmr,
+        sebar: answers.sebar,
+        puas: answers.puas,
+        suggestion
       });
+
+      if (result.status === "success") {
+        setStatus("surveyStatus", "Terima kasih. Maklum balas produk berjaya direkodkan.", "ok");
+        clearForm();
+      } else {
+        setStatus("surveyStatus", `Gagal hantar: ${result.message || "Semak Apps Script."}`, "bad");
+      }
+
+      button.disabled = false;
+      button.textContent = "Hantar Maklum Balas";
     }
 
-    function countBy(responses, field) {
-      return responses.reduce((acc, item) => {
-        const value = item[field] || "Tiada jawapan";
-        acc[value] = (acc[value] || 0) + 1;
-        return acc;
-      }, {});
+    async function loadDashboard() {
+      setStatus("dashboardStatus", "Sedang baca data maklum balas produk...");
+      const result = await callAppsScript({ action: "readProductFeedback" });
+
+      if (result.status !== "success" || !Array.isArray(result.data)) {
+        setStatus("dashboardStatus", `Gagal connect: ${result.message || "Semak deployment Apps Script."}`, "bad");
+        responses = [];
+        renderDashboard();
+        return;
+      }
+
+      responses = result.data.filter((item) => item.Nama);
+      setStatus("dashboardStatus", `Berjaya baca ${responses.length} respon daripada Google Sheet.`, "ok");
+      renderDashboard();
     }
 
-    function renderBarChart(targetId, data, total) {
-      const target = document.getElementById(targetId);
-      const entries = Object.entries(data);
-      if (!entries.length) {
+    function renderSummaryBars() {
+      const target = document.getElementById("summaryBars");
+      if (!responses.length) {
         target.innerHTML = '<div class="empty">Belum ada data.</div>';
         return;
       }
 
-      target.innerHTML = entries.map(([label, count]) => {
-        const percent = total ? Math.round((count / total) * 100) : 0;
+      target.innerHTML = QUESTIONS.map((key) => {
+        const column = QUESTION_LABELS[key];
+        const positives = responses.filter((item) => isPositive(item[column])).length;
+        const percent = Math.round((positives / responses.length) * 100);
         return `
-          <div class="bar-row">
-            <div>${label}</div>
-            <div class="bar-track"><div class="bar-fill" style="width:${percent}%"></div></div>
-            <div>${count}</div>
+          <div class="bar">
+            <div>${column}</div>
+            <div class="track"><div class="fill" style="width:${percent}%"></div></div>
+            <div>${percent}%</div>
           </div>
         `;
       }).join("");
     }
 
-    async function renderDashboard() {
-      // Use local storage immediately for fast UI, then try loading remote
-      let responses = getResponses(); 
-      
-      const updateDashboardUI = (data) => {
-        const today = new Date().toISOString().slice(0, 10);
-        
-        // Asingkan data murid khusus untuk carta graf supaya komen guru tidak masuk carta
-        const muridData = data.filter((item) => item.kategori === 'Murid');
-        
-        const understood = muridData.filter((item) => ["Sangat faham", "Faham"].includes(item.faham)).length;
-        const support = muridData.filter((item) => ["Faham sedikit", "Perlu bimbingan"].includes(item.faham) || ["Belum faham langsung", "Perlu bimbingan guru"].includes(item.bantuan) || item.belajar === "Masih keliru" || item.rasa === "Agak penat").length;
+    function renderDashboard() {
+      const murid = responses.filter((item) => item.Peranan === "MURID").length;
+      const guru = responses.filter((item) => item.Peranan === "GURU").length;
+      const totalAnswers = responses.length * QUESTIONS.length;
+      const positiveAnswers = responses.reduce((count, item) => {
+        return count + QUESTIONS.filter((key) => isPositive(item[QUESTION_LABELS[key]])).length;
+      }, 0);
+      const positivePercent = totalAnswers ? Math.round((positiveAnswers / totalAnswers) * 100) : 0;
 
-        document.getElementById("totalResponses").textContent = data.length;
-        document.getElementById("understoodCount").textContent = understood;
-        document.getElementById("supportCount").textContent = support;
-        document.getElementById("todayCount").textContent = data.filter((item) => item.date === today).length;
+      document.getElementById("totalAll").textContent = responses.length;
+      document.getElementById("totalStudent").textContent = murid;
+      document.getElementById("totalTeacher").textContent = guru;
+      document.getElementById("totalPositive").textContent = `${positivePercent}%`;
+      renderSummaryBars();
 
-        renderBarChart("fahamChart", countBy(muridData, "faham"), muridData.length);
-        renderBarChart("menarikChart", countBy(muridData, "menarik"), muridData.length);
-
-        const tableWrap = document.getElementById("tableWrap");
-        if (!data.length) {
-          tableWrap.innerHTML = '<div class="empty">Belum ada respons murid.</div>';
-          return;
-        }
-
-        tableWrap.innerHTML = `
-          <table>
-            <thead>
-              <tr>
-                <th>Masa</th>
-                <th>Kategori</th>
-                <th>Nama</th>
-                <th>Subjek / Kelas</th>
-                <th>Belajar</th>
-                <th>Rasa</th>
-                <th>Bantuan</th>
-                <th>Faham</th>
-                <th>Menarik</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${data.slice().reverse().map((item) => `
-                <tr>
-                  <td>${item.date}<br><small>${item.time}</small></td>
-                  <td><span style="background:${item.kategori === 'Guru' ? '#e8f4fd' : '#eaf7f1'}; color:${item.kategori === 'Guru' ? '#0f6f88' : '#1b9c76'}; padding:4px 8px; border-radius:4px; font-size:12px; font-weight:bold;">${item.kategori}</span></td>
-                  <td><strong>${item.name}</strong></td>
-                  <td>${item.className}</td>
-                  ${item.kategori === 'Guru' 
-                    ? `<td colspan="5" style="background: #fcfcfc;"><strong>Komen / Maklum Balas:</strong><br>${item.menarik}</td>`
-                    : `<td>${item.belajar}</td>
-                       <td>${item.rasa}</td>
-                       <td>${item.bantuan}</td>
-                       <td>${item.faham}</td>
-                       <td>${item.menarik}</td>`
-                  }
-                </tr>
-              `).join("")}
-            </tbody>
-          </table>
-        `;
-      };
-      
-      updateDashboardUI(responses);
-      
-      // Attempt to refresh from remote silently
-      try {
-        const remoteResponses = await loadRemoteResponses();
-        updateDashboardUI(remoteResponses);
-      } catch(e) {
-        console.log("Offline mode or sync failed, using local data.");
+      const list = document.getElementById("responseList");
+      if (!responses.length) {
+        list.innerHTML = '<div class="empty">Belum ada respon produk.</div>';
+        return;
       }
+
+      list.innerHTML = responses.slice().reverse().map((item) => `
+        <article class="card">
+          <strong>${item.Nama || ""}</strong>
+          <span>${item.Peranan || ""} | ${item["Kelas/Unit/Sekolah"] || ""} | ${item.Tarikh || ""} | ${item.Masa || ""}</span>
+          <div class="mini">
+            <div><b>Mudah</b>${item["Mudah digunakan"] || ""}</div>
+            <div><b>Arahan</b>${item["Arahan jelas"] || ""}</div>
+            <div><b>Menarik</b>${item["Reka bentuk menarik"] || ""}</div>
+            <div><b>NFC</b>${item["Fungsi NFC"] || ""}</div>
+            <div><b>KMR/PUICE</b>${item["Sesuai KMR/PUICE"] || ""}</div>
+            <div><b>Cadangan</b>${item.Cadangan || "-"}</div>
+          </div>
+        </article>
+      `).join("");
     }
 
     function exportCsv() {
-      const responses = getResponses();
-      const headers = ["Tarikh", "Masa", "Kategori", "Nama", "Subjek/Kelas", "Belajar", "Rasa", "Bantuan", "Faham", "Menarik"];
-      const rows = responses.map((item) => [
-        item.date, item.time, item.kategori || "Murid", item.name, item.className, item.belajar, item.rasa, item.bantuan, item.faham, item.menarik
-      ]);
+      const headers = ["Timestamp", "Tarikh", "Masa", "Peranan", "Nama", "Kelas/Unit/Sekolah", ...Object.values(QUESTION_LABELS), "Cadangan"];
+      const rows = responses.map((item) => headers.map((header) => item[header] || ""));
       const csv = [headers, ...rows].map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(",")).join("\n");
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "rekod-exit-ticket.csv";
-      a.click();
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "maklum-balas-produk-kmr-puice.csv";
+      link.click();
       URL.revokeObjectURL(url);
     }
 
-    // Toggle Kategori
-    document.querySelectorAll(".btn-kat").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".btn-kat").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        currentKategori = btn.dataset.kat;
-        
-        const nameLabel = document.getElementById("label-name");
-        const wrapGuru = document.getElementById("wrap-guru");
-        const soalanMurid = document.getElementById("soalan-murid");
-        const soalanGuru = document.getElementById("soalan-guru");
-        
-        if (currentKategori === "Guru") {
-          nameLabel.textContent = "Nama Guru";
-          document.getElementById("name").placeholder = "Contoh: CIKGU AMINAH";
-          wrapGuru.style.display = "none";
-          soalanMurid.style.display = "none";
-          soalanGuru.style.display = "block";
-        } else {
-          nameLabel.textContent = "Nama murid";
-          document.getElementById("name").placeholder = "Contoh: AISYAH";
-          wrapGuru.style.display = "block";
-          soalanMurid.style.display = "block";
-          soalanGuru.style.display = "none";
-        }
+    document.querySelectorAll(".tab").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach((item) => item.classList.toggle("active", item === tab));
+        document.querySelectorAll(".panel").forEach((panel) => panel.classList.toggle("active", panel.id === tab.dataset.tab));
+        if (tab.dataset.tab === "dashboard") loadDashboard();
       });
     });
 
-    document.querySelectorAll(".tab").forEach((tab) => {
-      tab.addEventListener("click", () => switchTab(tab.dataset.tab));
+    document.querySelectorAll(".role").forEach((role) => {
+      role.addEventListener("click", () => {
+        selectedRole = role.dataset.role;
+        document.querySelectorAll(".role").forEach((item) => item.classList.remove("selected"));
+        role.classList.add("selected");
+      });
     });
 
     document.querySelectorAll(".choice").forEach((choice) => {
       choice.addEventListener("click", () => {
-        const group = choice.closest(".choices");
-        group.querySelectorAll(".choice").forEach((item) => item.classList.remove("selected"));
+        choice.closest(".choices").querySelectorAll(".choice").forEach((item) => item.classList.remove("selected"));
         choice.classList.add("selected");
       });
     });
 
+    document.getElementById("surveyForm").addEventListener("submit", submitSurvey);
     document.getElementById("clearForm").addEventListener("click", clearForm);
+    document.getElementById("refreshData").addEventListener("click", loadDashboard);
     document.getElementById("exportCsv").addEventListener("click", exportCsv);
-
-    document.getElementById("resetData").addEventListener("click", () => {
-      if (confirm("Padam semua data demo dalam browser ini?")) {
-        saveResponses([]);
-        renderDashboard();
-      }
-    });
-
-    document.getElementById("ticketForm").addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const submitButton = event.target.querySelector('button[type="submit"]');
-      const nameInput = document.getElementById("name").value.trim().toUpperCase();
-      let className = document.getElementById("className").value;
-      
-      let finalAnswers = {};
-
-      if (currentKategori === "Murid") {
-        finalAnswers = selectedAnswers();
-        if (!nameInput || !className || questions.some((question) => !finalAnswers[question])) {
-          alert("Sila lengkapkan maklumat (nama, guru) dan semua pilihan soalan.");
-          return;
-        }
-      } else {
-        const komen = document.getElementById("komenGuru").value.trim();
-        if (!nameInput || !komen) {
-          alert("Sila masukkan nama dan maklum balas (komen) anda.");
-          return;
-        }
-        className = "GURU (KENDIRI)"; // Abaikan pilihan dropdown guru untuk kategori guru
-        
-        // Hantar sengkang (-) untuk soalan objektif, dan letak komen di bahagian "Menarik"
-        finalAnswers = {
-          belajar: "-",
-          rasa: "-",
-          bantuan: "-",
-          faham: "-",
-          menarik: komen
-        };
-      }
-
-      const now = new Date();
-      const rawNamePayload = `[${currentKategori.toUpperCase()}] ${nameInput}`;
-
-      const response = {
-        id: generateId(),
-        kategori: currentKategori,
-        rawNamePayload: rawNamePayload,
-        date: now.toISOString().slice(0, 10),
-        time: now.toLocaleTimeString("ms-MY", { hour: "2-digit", minute: "2-digit" }),
-        name: nameInput,
-        className,
-        ...finalAnswers
-      };
-
-      const responses = getResponses();
-      responses.push(response);
-      saveResponses(responses);
-
-      try {
-        submitButton.disabled = true;
-        submitButton.textContent = "Menghantar...";
-        
-        // Hantar ke sheet
-        await sendToSheet(response);
-        
-        clearForm();
-        const notice = document.getElementById("notice");
-        notice.textContent = "Terima kasih. Jawapan kamu telah direkodkan ke Google Sheet.";
-        notice.style.display = "block";
-        setTimeout(() => notice.style.display = "none", 3500);
-      } catch (error) {
-        // Fallback jika tiada internet / apps script fail
-        clearForm();
-        const notice = document.getElementById("notice");
-        notice.textContent = "Berjaya disimpan! (Dalam mod offline)";
-        notice.style.display = "block";
-        notice.style.background = "#fff3cd";
-        notice.style.color = "#856404";
-        setTimeout(() => notice.style.display = "none", 3500);
-      } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = "Hantar Exit Ticket";
-      }
-    });
-
-    // Initialize View
-    renderDashboard();
   </script>
 </body>
 </html>
