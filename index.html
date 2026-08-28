@@ -153,7 +153,7 @@
     }
 
     .role-options {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       margin-bottom: 12px;
     }
 
@@ -193,7 +193,7 @@
 
     .stats {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 10px;
       margin: 12px 0;
     }
@@ -322,6 +322,7 @@
         <div class="role-options" id="roleOptions">
           <button type="button" class="role" data-role="MURID">Murid</button>
           <button type="button" class="role" data-role="GURU">Guru</button>
+          <button type="button" class="role" data-role="IBU BAPA/PENJAGA">Ibu Bapa/Penjaga</button>
         </div>
 
         <div class="grid">
@@ -330,8 +331,8 @@
             <input id="respondentName" placeholder="Contoh: AISYAH / CIKGU SAL SABILA">
           </div>
           <div>
-            <label for="respondentGroup">Kelas / unit / sekolah</label>
-            <input id="respondentGroup" placeholder="Contoh: 5 CERDIK / SKSSAS">
+            <label for="respondentGroup">Kelas / sekolah / hubungan</label>
+            <input id="respondentGroup" placeholder="Contoh: 5 CERDIK / SKSSAS / IBU BAPA MURID">
           </div>
         </div>
 
@@ -438,6 +439,7 @@
         <div class="stat">Jumlah respon<strong id="totalAll">0</strong></div>
         <div class="stat">Murid<strong id="totalStudent">0</strong></div>
         <div class="stat">Guru<strong id="totalTeacher">0</strong></div>
+        <div class="stat">Ibu bapa/penjaga<strong id="totalParent">0</strong></div>
         <div class="stat">Respon positif<strong id="totalPositive">0%</strong></div>
       </div>
 
@@ -537,7 +539,7 @@
       const answers = selectedAnswers();
 
       if (!selectedRole || !name || !group || QUESTIONS.some((question) => !answers[question])) {
-        setStatus("surveyStatus", "Sila pilih peranan, isi nama, kelas/unit/sekolah dan jawab semua soalan.", "bad");
+        setStatus("surveyStatus", "Sila pilih peranan, isi nama, kelas/sekolah/hubungan dan jawab semua soalan.", "bad");
         return;
       }
 
@@ -615,6 +617,7 @@
     function renderDashboard() {
       const murid = responses.filter((item) => item.Peranan === "MURID").length;
       const guru = responses.filter((item) => item.Peranan === "GURU").length;
+      const parent = responses.filter((item) => item.Peranan === "IBU BAPA/PENJAGA").length;
       const totalAnswers = responses.length * QUESTIONS.length;
       const positiveAnswers = responses.reduce((count, item) => {
         return count + QUESTIONS.filter((key) => isPositive(item[QUESTION_LABELS[key]])).length;
@@ -624,6 +627,7 @@
       document.getElementById("totalAll").textContent = responses.length;
       document.getElementById("totalStudent").textContent = murid;
       document.getElementById("totalTeacher").textContent = guru;
+      document.getElementById("totalParent").textContent = parent;
       document.getElementById("totalPositive").textContent = `${positivePercent}%`;
       renderSummaryBars();
 
@@ -636,7 +640,7 @@
       list.innerHTML = responses.slice().reverse().map((item) => `
         <article class="card">
           <strong>${item.Nama || ""}</strong>
-          <span>${item.Peranan || ""} | ${item["Kelas/Unit/Sekolah"] || ""} | ${item.Tarikh || ""} | ${item.Masa || ""}</span>
+          <span>${item.Peranan || ""} | ${item["Kelas/Sekolah/Hubungan"] || ""} | ${item.Tarikh || ""} | ${item.Masa || ""}</span>
           <div class="mini">
             <div><b>Mudah</b>${item["Mudah digunakan"] || ""}</div>
             <div><b>Arahan</b>${item["Arahan jelas"] || ""}</div>
@@ -650,7 +654,7 @@
     }
 
     function exportCsv() {
-      const headers = ["Timestamp", "Tarikh", "Masa", "Peranan", "Nama", "Kelas/Unit/Sekolah", ...Object.values(QUESTION_LABELS), "Cadangan"];
+      const headers = ["Timestamp", "Tarikh", "Masa", "Peranan", "Nama", "Kelas/Sekolah/Hubungan", ...Object.values(QUESTION_LABELS), "Cadangan"];
       const rows = responses.map((item) => headers.map((header) => item[header] || ""));
       const csv = [headers, ...rows].map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(",")).join("\n");
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
