@@ -1,0 +1,35 @@
+DASHBOARD JEJAK KIBLAT NFC - KONVENSYEN DPD 2026
+
+Fail disediakan: index.html, logo.png dan Code.gs.
+Ini ialah versi siap untuk dipasang; laman dalam talian belum diterbitkan atau diubah.
+
+PERUBAHAN
+- Nama dan tema konvensyen, sekolah serta logo asal; warna emerald dan emas.
+- Paparan utama statistik, mod pameran dan ringkasan CSV tanpa identiti.
+- Nama, kelas dan senarai cadangan individu tidak dipaparkan.
+- Borang baharu tanpa nama, dengan persetujuan penggunaan maklum balas.
+- Data DPD 2026 diasingkan daripada respons terdahulu. Tujuh soalan asal yang sepunya dikekalkan dari segi makna.
+- Soalan khusus KMR/PUICE lama tidak ditukar label. Soalan pembelajaran digital baharu mempunyai lajur dan versi tersendiri.
+- Peratus menggunakan jawapan sah; data kosong tidak dianggap jawapan negatif. Tiada data dipaparkan sebagai 0%.
+- ID penghantaran mengelakkan rekod berganda apabila pengguna mengulangi percubaan penghantaran yang sama. Ia bukan pengesahan pengguna unik.
+
+CARA MEMASANG
+1. Simpan salinan kod Apps Script sedia ada sebelum membuat perubahan. Code.gs telah dipadankan dengan kod asal yang cikgu berikan, termasuk tindakan submitProductFeedback, readProductFeedback dan doPost.
+2. Buka DATA EXIT TICKET JEJAK QIBLAT NFC melalui akaun cikgujiwa@gmail.com: https://docs.google.com/spreadsheets/d/1QXBoLKR_89TElfi8xCwrtDtLhL3ssQ42Sikz5Rhd4Qc/edit . Pilih Extensions > Apps Script. Gantikan kod asal dengan kandungan Code.gs. SPREADSHEET_ID sudah diisi dengan ID fail tersebut.
+3. Terbitkan versi baharu deployment aplikasi web. Gunakan akaun pemilik sebagai pelaksana dan akses yang membolehkan pengunjung mengisi borang. Jika URL deployment berubah, ganti SCRIPT_URL dalam index.html.
+4. Pelayan mencipta helaian JejakKiblat_DPD2026 semasa penghantaran pertama. Tab RESPON_PRODUK_KMR_PUICE dikekalkan dan dibaca tanpa mengubah data atau tajuk lajurnya. Hanya dua tab tersebut dibaca.
+5. Muat naik index.html dan logo.png ke folder laman maklum balas yang sama. Kekalkan nama kedua-dua fail.
+6. Uji sambungan dan hantar satu respons ujian sendiri. Padam hanya baris ujian tersebut selepas semakan. Pastikan DPD 2026 memaparkan respons baharu dan Penilaian terdahulu memaparkan rekod lama.
+
+SEBELUM PELAYAN DIKEMAS KINI
+HTML boleh membaca API lama untuk statistik terdahulu. Pilih Penilaian terdahulu dalam senarai kumpulan data. Borang DPD baharu sengaja tidak menghantar ke pelayan lama kerana ia mungkin menggugurkan medan versi dan mencampurkan jawapan baharu dengan soalan lama.
+Memadam nama daripada paparan sahaja tidak menghalang akses nama melalui API lama. Pasang Code.gs yang menapis medan peribadi pada pelayan untuk menyelesaikan perkara ini; jangan terbitkan helaian respons mentah secara umum.
+
+NOTA PENGGUNAAN
+Nama atau maklumat peribadi tidak diperlukan dalam borang baharu. Cadangan disimpan untuk pasukan sahaja. Statistik ialah penilaian persepsi, bukan ukuran ketepatan sudut atau peningkatan pencapaian.
+Kod menggunakan sambungan JSONP seperti fail asal. Pengiraan dan operasi penyimpanan diuji menggunakan data simulasi tanpa menulis ke Google Sheets sebenar. Paparan visual dalam pelayar serta deployment sebenar belum dapat disahkan dalam sesi ini.
+
+REKA BENTUK FUTURISTIK (29 OKTOBER 2026)
+Paparan emerald gelap dengan aksen emas dan hijau bercahaya. Carta radar memaparkan peratus positif mengikut aspek (0-100%); carta donat memaparkan komposisi rekod mengikut peranan; graf bar bertindan memaparkan empat tahap persetujuan. Jadual data boleh dibuka di bawah graf. Carta SVG dibina dalam HTML tanpa pustaka grafik luar. Tiada data contoh dimasukkan dalam fail pengguna.
+Paparan awal menggunakan Semua rekod (soalan sepunya) agar respons terdahulu boleh dilihat tanpa dianggap sebagai respons baharu DPD. Tukar penapis kepada Penilaian DPD 2026 untuk melihat borang versi baharu sahaja.
+Pengiraan, pecahan carta dan keadaan kosong diuji menggunakan data simulasi. Fail HTML pada lokasi asal telah dikemas kini; muat semula tab untuk melihat reka bentuk baharu. Kod Apps Script tidak berubah dalam kemas kini visual ini.
